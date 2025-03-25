@@ -13,6 +13,16 @@
 #ifndef PHILO_H
 # define PHILO_H
 
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <unistd.h>
 
+
+
+# define ERR_ARG "Argument error\n"
+
+void error(char *err);
 
 #endif
