@@ -20,6 +20,7 @@
 # include <unistd.h> 
 
 # define ERR_ARG "Argument error\n"
+# define ERR_INIT "Initialization error\n"
 
 typedef struct s_philo
 {
@@ -32,6 +33,12 @@ typedef struct s_philo
 	struct s_data	*data;
 }	t_philo;
 
+typedef struct s_philolist
+{
+	t_philo		philo;
+	struct s_philolist	*next;
+}	t_philolist;
+
 typedef struct s_data
 {
 	int				num_of_philos;
@@ -43,11 +50,12 @@ typedef struct s_data
 	int				someone_died;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	write_mutex;
-	t_philo			*philos;
+	t_philolist		*philos;
 }	t_data;
 
 int	error(char *err);
 int	check_arg(char **av);
 int	ft_atoi(const char *str);
+int	inits(t_data *data, char **av);
 
 #endif
