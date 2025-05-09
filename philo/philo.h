@@ -14,6 +14,7 @@
 # define PHILO_H
 
 # include <pthread.h>
+# include <string.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/time.h>
@@ -57,5 +58,7 @@ int	error(char *err);
 int	check_arg(char **av);
 int	ft_atoi(const char *str);
 int	inits(t_data *data, char **av);
+t_philolist	*ft_lstnew(t_philo philo);
+void	ft_lstadd_back(t_philolist **lst, t_philolist *new);
 
 #endif

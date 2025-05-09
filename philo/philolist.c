@@ -6,11 +6,22 @@
 /*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:11:27 by musisman          #+#    #+#             */
-/*   Updated: 2025/05/09 12:15:06 by musisman         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:08:47 by musisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*dst;
+
+	dst = malloc(count * size);
+	if (!dst)
+		return (NULL);
+        memset(dst, 0, count * size);
+	return (dst);
+}
 
 t_philolist	*ft_lstnew(t_philo philo)
 {
@@ -22,12 +33,6 @@ t_philolist	*ft_lstnew(t_philo philo)
 	node->philo = philo;
 	node->next = NULL;
 	return (node);
-}
-
-void	ft_lstadd_front(t_philolist **lst, t_philolist *new)
-{
-	new->next = *lst;
-	*lst = new;
 }
 
 t_philolist	*ft_lstlast(t_philolist *lst)
@@ -48,3 +53,4 @@ void	ft_lstadd_back(t_philolist **lst, t_philolist *new)
 	}
 	ft_lstlast(*lst)->next = new;
 }
+
