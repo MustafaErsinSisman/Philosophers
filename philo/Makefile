@@ -1,7 +1,7 @@
 NAME 		= philo
 CC		= cc
-CFLAGS 		= 
-SRCS		= philo.c utils.c
+CFLAGS 		= -Wall -Wextra -Werror -pthread
+SRCS		= philo.c utils.c initialization.c philolist.c
 OBJS		= $(SRCS:.c=.o)
 
 all: $(NAME)
