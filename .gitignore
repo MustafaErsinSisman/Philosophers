@@ -1,0 +1,14 @@
+# Derleme dosyaları
+*.o
+*.a
+philo/philo
+
+# Geçici dosyalar
+*~
+*.swp
+
+# IDE dosyaları
+.vscode/
+
+# OS dosyaları
+.DS_Store
