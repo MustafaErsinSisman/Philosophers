@@ -2,7 +2,7 @@
 *.o
 *.a
 philo/philo
-deneme
+denemeler/deneme
 
 # Geçici dosyalar
 *~
