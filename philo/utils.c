@@ -30,60 +30,40 @@ int	error(char *err)
 	return (-1);
 }
 
-int	ft_isdigit(int c)
+long long	current_time_ms(void)
 {
-	if ((c >= 48 && c <= 57) || (c == '-' || c == '+'))
-		return (1);
-	return (0);
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000LL + tv.tv_usec / 1000);
 }
 
-int	ft_atoi(const char *str)
+void	smart_sleep(long long ms, t_data *d)
 {
-	size_t	i;
-	size_t	nb;
-	int		sing;
+	long long	start;
 
-	i = 0;
-	sing = 1;
-	nb = 0;
-	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
-		i++;
-	if (str[i] == '-' || str[i] == '+')
+	start = current_time_ms();
+	while (current_time_ms() - start < ms)
 	{
-		if (str[i] == '-')
-			sing = -1;
-		i++;
-	}
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		nb = (str[i] - '0') + (nb * 10);
-		i++;
-	}
-	return (nb * sing);
-}
-
-int	check_arg(char **av)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (av[++i])
-	{
-		j = -1;
-		while (av[i][++j])
+		pthread_mutex_lock(&d->write_mutex);
+		if (d->someone_died)
 		{
-			if (!ft_isdigit(av[i][j]))
-				return (-1);
+			pthread_mutex_unlock(&d->write_mutex);
+			break ;
 		}
+		pthread_mutex_unlock(&d->write_mutex);
+		usleep(100);
 	}
-	if (ft_atoi(av[1]) > 200)
-		return (-1);
-	i = 0;
-	while (av[++i])
-	{
-		if (ft_atoi(av[i]) <= 0 || (i != 1 && ft_atoi(av[i]) < 60))
-			return (-1);
-	}
-	return (0);
+}
+
+void	print_state(t_philo *p, char *state)
+{
+	t_data	*d;
+
+	d = p->data;
+	pthread_mutex_lock(&d->write_mutex);
+	if (!d->someone_died)
+		printf("%lld %d %s\n",
+			current_time_ms() - d->start_time, p->id, state);
+	pthread_mutex_unlock(&d->write_mutex);
 }

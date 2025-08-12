@@ -36,7 +36,7 @@ typedef struct s_philo
 
 typedef struct s_philolist
 {
-	t_philo		philo;
+	t_philo				philo;
 	struct s_philolist	*next;
 }	t_philolist;
 
@@ -54,11 +54,17 @@ typedef struct s_data
 	t_philolist		*philos;
 }	t_data;
 
-int	error(char *err);
-int	check_arg(char **av);
-int	ft_atoi(const char *str);
-int	inits(t_data *data, char **av);
-t_philolist	*ft_lstnew(t_philo philo);
-void	ft_lstadd_back(t_philolist **lst, t_philolist *new);
+t_data		*init_data(char **av, int ac);
+void		init_philos(t_data *d);
+long long	current_time_ms(void);
+void		smart_sleep(long long ms, t_data *d);
+void		print_state(t_philo *p, char *state);
+void		one_philo_case(t_philo *p, t_data *d);
+void		philo_eat(t_philo *p, t_data *d);
+void		philo_sleep(t_philo *p, t_data *d);
+void		*philo_routine(void *arg);
+int			check_death(t_data *d, t_philolist *cur);
+int			check_meals_done(t_data *d, t_philolist *cur);
+void		*monitor_routine(void *arg);
 
 #endif
