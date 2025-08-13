@@ -20,9 +20,6 @@
 # include <sys/time.h>
 # include <unistd.h> 
 
-# define ERR_ARG "Argument error\n"
-# define ERR_INIT "Initialization error\n"
-
 typedef struct s_philo
 {
 	int				id;

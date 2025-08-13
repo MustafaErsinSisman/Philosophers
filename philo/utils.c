@@ -12,24 +12,6 @@
 
 #include "philo.h"
 
-static void	ft_putstr_fd(char *s, int fd)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-	{
-		write(fd, &s[i], 1);
-		i++;
-	}
-}
-
-int	error(char *err)
-{
-	ft_putstr_fd(err, 2);
-	return (-1);
-}
-
 long long	current_time_ms(void)
 {
 	struct timeval	tv;
