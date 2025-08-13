@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-static void	start_threads(t_data *d)
+static void	start_philo_threads(t_data *d)
 {
 	t_philolist	*cur;
 
@@ -25,7 +25,7 @@ static void	start_threads(t_data *d)
 	}
 }
 
-static void	join_threads(t_data *d)
+static void	join_philo_threads(t_data *d)
 {
 	t_philolist	*cur;
 
@@ -47,9 +47,9 @@ int	main(int ac, char **av)
 	d = init_data(av, ac);
 	init_mutexes(d);
 	init_philos(d);
-	start_threads(d);
+	start_philo_threads(d);
 	pthread_create(&monitor, NULL, monitor_routine, d);
 	pthread_join(monitor, NULL);
-	join_threads(d);
+	join_philo_threads(d);
 	return (0);
 }
