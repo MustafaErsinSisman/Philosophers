@@ -12,6 +12,27 @@
 
 #include "philo.h"
 
+void	cleanup(t_data *d)
+{
+	t_philolist	*cur;
+	t_philolist	*tmp;
+	int			i;
+
+	i = 0;
+	while (i < d->num_of_philos)
+		pthread_mutex_destroy(&d->forks[i++]);
+	pthread_mutex_destroy(&d->write_mutex);
+	cur = d->philos;
+	while (cur)
+	{
+		tmp = cur->next;
+		free(cur);
+		cur = tmp;
+	}
+	free(d->forks);
+	free(d);
+}
+
 static void	start_philo_threads(t_data *d)
 {
 	t_philolist	*cur;
@@ -51,5 +72,6 @@ int	main(int ac, char **av)
 	pthread_create(&monitor, NULL, monitor_routine, d);
 	pthread_join(monitor, NULL);
 	join_philo_threads(d);
+	cleanup(d);
 	return (0);
 }

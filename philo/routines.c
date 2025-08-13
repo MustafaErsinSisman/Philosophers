@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routines.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:11:27 by musisman          #+#    #+#             */
-/*   Updated: 2025/08/12 17:07:15 by musisman         ###   ########.fr       */
+/*   Updated: 2025/08/14 00:35:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ void	*philo_routine(void *arg)
 	p = (t_philo *)arg;
 	d = p->data;
 	if (d->num_of_philos == 1)
-		return (one_philo_case(p, d), NULL);
+	{
+		one_philo_case(p, d);
+		return (NULL);
+	}
 	if (p->id % 2 == 0)
 		usleep(100);
 	while (1)
