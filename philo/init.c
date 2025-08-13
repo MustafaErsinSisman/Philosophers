@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:23:57 by musisman          #+#    #+#             */
-/*   Updated: 2025/08/12 17:01:12 by musisman         ###   ########.fr       */
+/*   Updated: 2025/08/13 23:52:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,16 @@ t_data	*init_data(char **av, int ac)
 	d->someone_died = 0;
 	d->forks = malloc(sizeof(pthread_mutex_t) * d->num_of_philos);
 	return (d);
+}
+
+void	init_mutexes(t_data *d)
+{
+	int	i;
+
+	pthread_mutex_init(&d->write_mutex, NULL);
+	i = -1;
+	while (++i < d->num_of_philos)
+		pthread_mutex_init(&d->forks[i], NULL);
 }
 
 t_philolist	*create_node(int id, t_data *d)
