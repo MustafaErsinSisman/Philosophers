@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-void	cleanup(t_data *d)
+static void	free_all(t_data *d)
 {
 	t_philolist	*cur;
 	t_philolist	*tmp;
@@ -66,12 +66,16 @@ int	main(int ac, char **av)
 	if (ac != 5 && ac != 6)
 		return (1);
 	d = init_data(av, ac);
-	init_mutexes(d);
+	if (!d)
+		return (1);
+	init_data_mutexes(d);
 	init_philos(d);
+	if (!d->philos)
+		return (1);
 	start_philo_threads(d);
 	pthread_create(&monitor, NULL, monitor_routine, d);
 	pthread_join(monitor, NULL);
 	join_philo_threads(d);
-	cleanup(d);
+	free_all(d);
 	return (0);
 }

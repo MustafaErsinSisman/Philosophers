@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:23:57 by musisman          #+#    #+#             */
-/*   Updated: 2025/08/13 23:52:27 by marvin           ###   ########.fr       */
+/*   Updated: 2025/08/14 14:32:55 by musisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,23 @@ t_data	*init_data(char **av, int ac)
 	if (!d)
 		return (NULL);
 	d->philos = NULL;
-	d->num_of_philos = atoi(av[1]);
-	d->time_to_die = atoi(av[2]);
-	d->time_to_eat = atoi(av[3]);
-	d->time_to_sleep = atoi(av[4]);
+	d->num_of_philos = ft_atoi(av[1]);
+	d->time_to_die = ft_atoi(av[2]);
+	d->time_to_eat = ft_atoi(av[3]);
+	d->time_to_sleep = ft_atoi(av[4]);
 	if (ac == 6)
-		d->meals_required = atoi(av[5]);
+		d->meals_required = ft_atoi(av[5]);
 	else
 		d->meals_required = -1;
 	d->start_time = current_time_ms();
 	d->someone_died = 0;
 	d->forks = malloc(sizeof(pthread_mutex_t) * d->num_of_philos);
+	if (!d->forks)
+		return (NULL);
 	return (d);
 }
 
-void	init_mutexes(t_data *d)
+void	init_data_mutexes(t_data *d)
 {
 	int	i;
 
@@ -73,6 +75,8 @@ void	init_philos(t_data *d)
 	while (i <= d->num_of_philos)
 	{
 		node = create_node(i, d);
+		if (!node)
+			d->philos = NULL;
 		if (!d->philos)
 			d->philos = node;
 		if (prev)
