@@ -6,7 +6,7 @@
 /*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:23:57 by musisman          #+#    #+#             */
-/*   Updated: 2025/08/14 14:32:55 by musisman         ###   ########.fr       */
+/*   Updated: 2025/08/14 15:32:56 by musisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,19 @@ t_data	*init_data(char **av, int ac)
 	return (d);
 }
 
-void	init_data_mutexes(t_data *d)
+int	init_data_mutexes(t_data *d)
 {
 	int	i;
 
-	pthread_mutex_init(&d->write_mutex, NULL);
+	if (pthread_mutex_init(&d->write_mutex, NULL))
+		return (1);
 	i = -1;
 	while (++i < d->num_of_philos)
-		pthread_mutex_init(&d->forks[i], NULL);
+	{
+		if (pthread_mutex_init(&d->forks[i], NULL))
+			return (1);
+	}
+	return (0);
 }
 
 t_philolist	*create_node(int id, t_data *d)
@@ -63,7 +68,19 @@ t_philolist	*create_node(int id, t_data *d)
 	return (node);
 }
 
-void	init_philos(t_data *d)
+static void	free_philo_nodes(t_philolist *head)
+{
+	t_philolist	*tmp;
+
+	while (head)
+	{
+		tmp = head->next;
+		free(head);
+		head = tmp;
+	}
+}
+
+int	init_philos(t_data *d)
 {
 	int			i;
 	t_philolist	*prev;
@@ -76,7 +93,11 @@ void	init_philos(t_data *d)
 	{
 		node = create_node(i, d);
 		if (!node)
+		{
+			free_philo_nodes(d->philos);
 			d->philos = NULL;
+			return (1);
+		}
 		if (!d->philos)
 			d->philos = node;
 		if (prev)
@@ -84,4 +105,5 @@ void	init_philos(t_data *d)
 		prev = node;
 		i++;
 	}
+	return (0);
 }

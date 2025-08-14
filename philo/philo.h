@@ -52,8 +52,8 @@ typedef struct s_data
 
 t_data		*init_data(char **av, int ac);
 int			ft_atoi(const char *str);
-void		init_data_mutexes(t_data *d);
-void		init_philos(t_data *d);
+int			init_data_mutexes(t_data *d);
+int			init_philos(t_data *d);
 long long	current_time_ms(void);
 void		smart_sleep(long long ms, t_data *d);
 void		print_state(t_philo *p, char *state);
