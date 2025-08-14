@@ -6,7 +6,7 @@
 /*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:23:57 by musisman          #+#    #+#             */
-/*   Updated: 2025/08/14 15:32:56 by musisman         ###   ########.fr       */
+/*   Updated: 2025/08/14 16:12:42 by musisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ t_data	*init_data(char **av, int ac)
 	d->someone_died = 0;
 	d->forks = malloc(sizeof(pthread_mutex_t) * d->num_of_philos);
 	if (!d->forks)
+	{
+		free(d);
 		return (NULL);
+	}
 	return (d);
 }
 
