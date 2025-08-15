@@ -85,11 +85,8 @@ static int	join_philo_threads(t_data *d)
 	cur = d->philos;
 	while (cur)
 	{
-		if (cur->philo.thread)
-		{
-			if (pthread_join(cur->philo.thread, NULL))
-				error_flag = 1;
-		}
+		if (pthread_join(cur->philo.thread, NULL))
+			error_flag = 1;
 		cur = cur->next;
 	}
 	return (error_flag);
