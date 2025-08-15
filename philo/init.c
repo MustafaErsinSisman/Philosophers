@@ -6,7 +6,7 @@
 /*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:23:57 by musisman          #+#    #+#             */
-/*   Updated: 2025/08/15 20:38:43 by musisman         ###   ########.fr       */
+/*   Updated: 2025/08/14 16:12:42 by musisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ t_data	*init_data(char **av, int ac)
 		free(d);
 		return (NULL);
 	}
-	d->init_write_bool = 0;
-	d->init_state_bool = 0;
 	return (d);
 }
 
@@ -45,26 +43,12 @@ int	init_data_mutexes(t_data *d)
 {
 	int	i;
 
-	if (!pthread_mutex_init(&d->write_mutex, NULL))
-		d->init_write_bool = 1;
-	else
+	if (pthread_mutex_init(&d->write_mutex, NULL))
 		return (1);
-	if (!pthread_mutex_init(&d->state_mutex, NULL))
-		d->init_state_bool = 1;
-	else
-		return (1);
-	d->init_forks_bool = malloc(d->num_of_philos * sizeof(int));
-	if (!d->init_forks_bool)
-		return (1);
-	i = -1;
-	while (++i < d->num_of_philos)
-		d->init_forks_bool[i] = 0;
 	i = -1;
 	while (++i < d->num_of_philos)
 	{
-		if (!pthread_mutex_init(&d->forks[i], NULL))
-			d->init_forks_bool[i] = 1;
-		else
+		if (pthread_mutex_init(&d->forks[i], NULL))
 			return (1);
 	}
 	return (0);

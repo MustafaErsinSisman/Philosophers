@@ -48,16 +48,17 @@ long long	current_time_ms(void)
 void	smart_sleep(long long ms, t_data *d)
 {
 	long long	start;
-	int			stop;
 
 	start = current_time_ms();
 	while (current_time_ms() - start < ms)
 	{
-		pthread_mutex_lock(&d->state_mutex);
-		stop = d->someone_died;
-		pthread_mutex_unlock(&d->state_mutex);
-		if (stop)
+		pthread_mutex_lock(&d->write_mutex);
+		if (d->someone_died)
+		{
+			pthread_mutex_unlock(&d->write_mutex);
 			break ;
+		}
+		pthread_mutex_unlock(&d->write_mutex);
 		usleep(100);
 	}
 }
@@ -65,32 +66,36 @@ void	smart_sleep(long long ms, t_data *d)
 void	print_state(t_philo *p, char *state)
 {
 	t_data	*d;
-	int		ok;
 
 	d = p->data;
-	pthread_mutex_lock(&d->state_mutex);
-	ok = !d->someone_died;
-	if (ok)
-	{
-		pthread_mutex_lock(&d->write_mutex);
+	pthread_mutex_lock(&d->write_mutex);
+	if (!d->someone_died)
 		printf("%lld %d %s\n",
 			current_time_ms() - d->start_time, p->id, state);
-		pthread_mutex_unlock(&d->write_mutex);
-	}
-	pthread_mutex_unlock(&d->state_mutex);
+	pthread_mutex_unlock(&d->write_mutex);
 }
 
 void	take_forks(t_philo *p, pthread_mutex_t **first,
-				pthread_mutex_t **second)
+			pthread_mutex_t **second, int meals_required)
 {
-	if (p->id % 2 == 0)
+	int	swap;
+
+	swap = 0;
+	if (meals_required % 2 == 0)
 	{
-		*first = p->left_fork;
-		*second = p->right_fork;
+		if (p->id % 2 != 0)
+			swap = 1;
 	}
-	else
+	else if (p->id % 2 == 0)
+		swap = 1;
+	if (swap)
 	{
 		*first = p->right_fork;
 		*second = p->left_fork;
+	}
+	else
+	{
+		*first = p->left_fork;
+		*second = p->right_fork;
 	}
 }
