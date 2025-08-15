@@ -6,7 +6,7 @@
 /*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 17:05:38 by musisman          #+#    #+#             */
-/*   Updated: 2025/08/14 17:02:46 by musisman         ###   ########.fr       */
+/*   Updated: 2025/08/15 20:37:06 by musisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,24 @@ void	one_philo_case(t_philo *p, t_data *d)
 void	philo_eat(t_philo *p, t_data *d, pthread_mutex_t *first,
 		pthread_mutex_t *second)
 {
-	if (p->id % 2 == 0)
-	{
-		first = p->left_fork;
-		second = p->right_fork;
-	}
-	else
-	{
-		first = p->right_fork;
-		second = p->left_fork;
-	}
+	take_forks(p, &first, &second);
 	pthread_mutex_lock(first);
 	print_state(p, "has taken a fork");
 	pthread_mutex_lock(second);
 	print_state(p, "has taken a fork");
-	pthread_mutex_lock(&d->write_mutex);
+	pthread_mutex_lock(&d->state_mutex);
 	p->last_meal_time = current_time_ms();
 	if (!d->someone_died)
+	{
+		pthread_mutex_lock(&d->write_mutex);
 		printf("%lld %d is eating\n", current_time_ms() - d->start_time, p->id);
-	pthread_mutex_unlock(&d->write_mutex);
+		pthread_mutex_unlock(&d->write_mutex);
+	}
+	pthread_mutex_unlock(&d->state_mutex);
 	smart_sleep(d->time_to_eat, d);
-	pthread_mutex_lock(&d->write_mutex);
+	pthread_mutex_lock(&d->state_mutex);
 	p->meals_eaten++;
-	pthread_mutex_unlock(&d->write_mutex);
+	pthread_mutex_unlock(&d->state_mutex);
 	pthread_mutex_unlock(second);
 	pthread_mutex_unlock(first);
 }
@@ -64,6 +59,7 @@ int	check_death(t_data *d, t_philolist *cur)
 	if (!d->someone_died && now - cur->philo.last_meal_time > d->time_to_die)
 	{
 		d->someone_died = 1;
+		pthread_mutex_lock(&d->write_mutex);
 		printf("%lld %d died\n", now - d->start_time, cur->philo.id);
 		pthread_mutex_unlock(&d->write_mutex);
 		return (1);
@@ -73,7 +69,9 @@ int	check_death(t_data *d, t_philolist *cur)
 
 int	check_meals_done(t_data *d, t_philolist *cur)
 {
-	if (d->meals_required == -1 || cur->philo.meals_eaten < d->meals_required)
-		return (0);
-	return (1);
+	(void)d;
+	if (cur->philo.meals_eaten >= 0 && d->meals_required != -1
+		&& cur->philo.meals_eaten >= d->meals_required)
+		return (1);
+	return (0);
 }

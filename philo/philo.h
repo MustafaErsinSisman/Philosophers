@@ -17,7 +17,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/time.h>
-# include <unistd.h> 
+# include <unistd.h>
 
 typedef struct s_philo
 {
@@ -49,6 +49,8 @@ typedef struct s_data
 	int				*init_forks_bool;
 	pthread_mutex_t	write_mutex;
 	int				init_write_bool;
+	pthread_mutex_t	state_mutex;
+	int				init_state_bool;
 	t_philolist		*philos;
 }	t_data;
 
@@ -59,6 +61,8 @@ int			init_philos(t_data *d);
 long long	current_time_ms(void);
 void		smart_sleep(long long ms, t_data *d);
 void		print_state(t_philo *p, char *state);
+void		take_forks(t_philo *p, pthread_mutex_t **first,
+				pthread_mutex_t **second);
 void		one_philo_case(t_philo *p, t_data *d);
 void		philo_eat(t_philo *p, t_data *d, pthread_mutex_t *first,
 				pthread_mutex_t *second);

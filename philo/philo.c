@@ -12,30 +12,29 @@
 
 #include "philo.h"
 
-static int	free_all(t_data *d)
+static int	free_all(t_data *d, int i, int error_flag)
 {
-	t_philolist	*cur;
 	t_philolist	*tmp;
-	int			i;
-	int			error_flag;
 
-	error_flag = 0;
-	i = 0;
-	while (i < d->num_of_philos)
+	while (++i < d->num_of_philos)
 	{
-		if (d->init_forks_bool[i] && pthread_mutex_destroy(&d->forks[i]))
+		if (d->init_forks_bool && d->init_forks_bool[i])
+			if (pthread_mutex_destroy(&d->forks[i]))
+				error_flag = 1;
+	}
+	if (d->init_state_bool)
+		if (pthread_mutex_destroy(&d->state_mutex))
 			error_flag = 1;
-		i++;
-	}
-	if (d->init_write_bool && pthread_mutex_destroy(&d->write_mutex))
-		error_flag = 1;
-	cur = d->philos;
-	while (cur)
+	if (d->init_write_bool)
+		if (pthread_mutex_destroy(&d->write_mutex))
+			error_flag = 1;
+	while (d->philos)
 	{
-		tmp = cur->next;
-		free(cur);
-		cur = tmp;
+		tmp = d->philos->next;
+		free(d->philos);
+		d->philos = tmp;
 	}
+	free(d->init_forks_bool);
 	free(d->forks);
 	free(d);
 	return (error_flag);
@@ -103,13 +102,13 @@ int	main(int ac, char **av)
 	if (!d)
 		return (1);
 	if (init_data_mutexes(d) || init_philos(d))
-		return (free_all(d));
+		return (free_all(d, -1, 0));
 	if (start_philo_threads(d) || monitor_thread(d)
 		|| join_philo_threads(d))
 		status = 1;
 	else
 		status = 0;
-	if (free_all(d))
+	if (free_all(d, -1, 0))
 		status = 1;
 	return (status);
 }
