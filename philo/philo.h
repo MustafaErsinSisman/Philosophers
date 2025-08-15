@@ -58,7 +58,8 @@ long long	current_time_ms(void);
 void		smart_sleep(long long ms, t_data *d);
 void		print_state(t_philo *p, char *state);
 void		one_philo_case(t_philo *p, t_data *d);
-void		philo_eat(t_philo *p, t_data *d);
+void		philo_eat(t_philo *p, t_data *d, pthread_mutex_t *first,
+				pthread_mutex_t *second);
 void		philo_sleep(t_philo *p, t_data *d);
 void		*philo_routine(void *arg);
 int			check_death(t_data *d, t_philolist *cur);
