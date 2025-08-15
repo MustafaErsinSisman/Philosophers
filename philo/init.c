@@ -6,7 +6,7 @@
 /*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:23:57 by musisman          #+#    #+#             */
-/*   Updated: 2025/08/15 16:18:11 by musisman         ###   ########.fr       */
+/*   Updated: 2025/08/15 16:21:51 by musisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int	init_data_mutexes(t_data *d)
 		return (1);
 	while (++i < d->num_of_philos)
 		d->init_forks_bool[i] = 0;
-	printf("bu\n");
 	i = -1;
 	while (++i < d->num_of_philos)
 	{
