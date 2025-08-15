@@ -46,7 +46,9 @@ typedef struct s_data
 	long long		start_time;
 	int				someone_died;
 	pthread_mutex_t	*forks;
+	int				*init_forks_bool;
 	pthread_mutex_t	write_mutex;
+	int				init_write_bool;
 	t_philolist		*philos;
 }	t_data;
 

@@ -6,7 +6,7 @@
 /*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:23:57 by musisman          #+#    #+#             */
-/*   Updated: 2025/08/14 16:12:42 by musisman         ###   ########.fr       */
+/*   Updated: 2025/08/15 16:18:11 by musisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,27 @@ int	init_data_mutexes(t_data *d)
 {
 	int	i;
 
+	d->init_write_bool = 0;
 	if (pthread_mutex_init(&d->write_mutex, NULL))
+	{
+		d->init_write_bool = 1;
 		return (1);
+	}
+	i = -1;
+	d->init_forks_bool = malloc(d->num_of_philos * sizeof(int));
+	if (!d->init_forks_bool)
+		return (1);
+	while (++i < d->num_of_philos)
+		d->init_forks_bool[i] = 0;
+	printf("bu\n");
 	i = -1;
 	while (++i < d->num_of_philos)
 	{
 		if (pthread_mutex_init(&d->forks[i], NULL))
+		{
+			d->init_forks_bool[i] = 1;
 			return (1);
+		}
 	}
 	return (0);
 }

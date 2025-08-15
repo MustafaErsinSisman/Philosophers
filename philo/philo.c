@@ -23,11 +23,11 @@ static int	free_all(t_data *d)
 	i = 0;
 	while (i < d->num_of_philos)
 	{
-		if (pthread_mutex_destroy(&d->forks[i]))
+		if (d->init_forks_bool[i] && pthread_mutex_destroy(&d->forks[i]))
 			error_flag = 1;
 		i++;
 	}
-	if (pthread_mutex_destroy(&d->write_mutex))
+	if (d->init_write_bool && pthread_mutex_destroy(&d->write_mutex))
 		error_flag = 1;
 	cur = d->philos;
 	while (cur)
