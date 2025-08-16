@@ -62,7 +62,7 @@ void		take_forks(t_philo *p, pthread_mutex_t **first,
 void		one_philo_case(t_philo *p, t_data *d);
 void		philo_eat(t_philo *p, t_data *d, pthread_mutex_t *first,
 				pthread_mutex_t *second);
-void		philo_sleep(t_philo *p, t_data *d);
+void		philo_sleep_and_think(t_philo *p, t_data *d);
 void		*philo_routine(void *arg);
 int			check_death(t_data *d, t_philolist *cur);
 int			check_meals_done(t_data *d, t_philolist *cur);

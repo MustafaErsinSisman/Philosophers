@@ -6,7 +6,7 @@
 /*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:11:27 by musisman          #+#    #+#             */
-/*   Updated: 2025/08/15 20:59:08 by musisman         ###   ########.fr       */
+/*   Updated: 2025/08/16 15:52:33 by musisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ void	*philo_routine(void *arg)
 				&& p->meals_eaten >= d->meals_required))
 			return (pthread_mutex_unlock(&d->write_mutex), NULL);
 		pthread_mutex_unlock(&d->write_mutex);
-		print_state(p, "is thinking");
 		philo_eat(p, d, NULL, NULL);
-		philo_sleep(p, d);
+		philo_sleep_and_think(p, d);
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: musisman <musisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 17:05:38 by musisman          #+#    #+#             */
-/*   Updated: 2025/08/15 21:19:32 by musisman         ###   ########.fr       */
+/*   Updated: 2025/08/16 15:54:29 by musisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,12 @@ void	philo_eat(t_philo *p, t_data *d, pthread_mutex_t *first,
 	pthread_mutex_unlock(first);
 }
 
-void	philo_sleep(t_philo *p, t_data *d)
+void	philo_sleep_and_think(t_philo *p, t_data *d)
 {
 	print_state(p, "is sleeping");
 	smart_sleep(d->time_to_sleep, d);
+	print_state(p, "is thinking");
+	usleep(100);
 }
 
 int	check_death(t_data *d, t_philolist *cur)
